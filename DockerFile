@@ -1,47 +1,30 @@
-# Etapa 1: Utilizar una imagen base oficial de Node.js
+# Primer paso: Tomar una imagen oficial de Node.js para comenzar 
 FROM node:16
 
-# Comentario: Utilizamos una imagen base de Node.js versión 16. Esto incluye Node.js y npm.
-
-# Establecer el directorio de trabajo dentro del contenedor
+# Se creara un directorio de trabajo dentro del contenedor
 WORKDIR /usr/src/app
 
-# Comentario: Crea un directorio de trabajo dentro del contenedor, donde se copiará y ejecutará la aplicación.
-
-# Copiar el package.json y package-lock.json para instalar dependencias
+# Copiar los archivos package.json y package-lock.json
 COPY package*.json ./
 
-# Comentario: Copia los archivos de definición de dependencias (package.json y package-lock.json) en el directorio de trabajo.
-
-# Instalar las dependencias de Node.js
+# Se instalara las dependencias de la app
 RUN npm install
 
-# Comentario: Ejecuta el comando para instalar las dependencias de la aplicación usando npm.
-
-# Copiar todo el código de la aplicación en el directorio de trabajo
+# Se metera todo el código de la app dentro del contenedor
 COPY . .
 
-# Comentario: Copia todo el código fuente de la aplicación en el directorio de trabajo dentro del contenedor.
-
-# Instalar MySQL Client (necesario para conectar la aplicación con la base de datos MySQL)
+# Se debe instalar MySQL Client para conectar la app con la base de datos
 RUN apt-get update && apt-get install -y mysql-client
 
-# Comentario: Actualiza el gestor de paquetes apt y luego instala el cliente de MySQL. Esto permitirá a Node.js interactuar con la base de datos MySQL.
-
-# Exponer el puerto que utiliza la aplicación (ejemplo: 3000 para una aplicación Express)
+# Se abrira el puerto 3000 para que la app sea accesible
 EXPOSE 3000
 
-# Comentario: Expone el puerto 3000 para que la aplicación sea accesible externamente.
-
-# Definir la variable de entorno para conexión a MySQL
+# Se va a configurar la conexión a MySQL
 ENV MYSQL_HOST=mysql
 ENV MYSQL_DATABASE=nombre_bd
 ENV MYSQL_USER=root
 ENV MYSQL_PASSWORD=contraseña
 
-# Comentario: Define variables de entorno que la aplicación usará para conectarse a la base de datos MySQL. Estos valores son configurables.
-
-# Iniciar la aplicación de Node.js
+# Aqui iniciamos la aplicación de Node.js
 CMD ["npm", "start"]
 
-# Comentario: Especifica el comando que se ejecutará cuando el contenedor arranque. En este caso, inicia la aplicación de Node.js usando npm start.
